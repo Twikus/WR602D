@@ -21,7 +21,7 @@ class Pdf
 
     #[ORM\ManyToOne(inversedBy: 'pdfs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_id = null;
+    private ?user $user = null;
 
     public function getId(): ?int
     {
@@ -54,12 +54,12 @@ class Pdf
 
     public function getUserId(): ?user
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?user $user_id): static
+    public function setUserId(?user $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
