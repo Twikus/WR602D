@@ -34,6 +34,10 @@ class User
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?subscription $subscription_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +123,18 @@ class User
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getSubscriptionId(): ?subscription
+    {
+        return $this->subscription_id;
+    }
+
+    public function setSubscriptionId(?subscription $subscription_id): static
+    {
+        $this->subscription_id = $subscription_id;
 
         return $this;
     }
