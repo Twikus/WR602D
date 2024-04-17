@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -37,6 +39,17 @@ class User
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?subscription $subscription_id = null;
+
+    /**
+     * @var Collection<int, Pdf>
+     */
+    #[ORM\OneToMany(targetEntity: Pdf::class, mappedBy: 'user_id')]
+    private Collection $pdfs;
+
+    public function __construct()
+    {
+        $this->pdfs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +148,36 @@ class User
     public function setSubscriptionId(?subscription $subscription_id): static
     {
         $this->subscription_id = $subscription_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pdf>
+     */
+    public function getPdfs(): Collection
+    {
+        return $this->pdfs;
+    }
+
+    public function addPdf(Pdf $pdf): static
+    {
+        if (!$this->pdfs->contains($pdf)) {
+            $this->pdfs->add($pdf);
+            $pdf->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removePdf(Pdf $pdf): static
+    {
+        if ($this->pdfs->removeElement($pdf)) {
+            // set the owning side to null (unless already changed)
+            if ($pdf->getUserId() === $this) {
+                $pdf->setUserId(null);
+            }
+        }
 
         return $this;
     }
