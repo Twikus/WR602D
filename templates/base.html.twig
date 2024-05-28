@@ -14,6 +14,24 @@
         {% endblock %}
     </head>
     <body>
+        <header class="bg-red-600 text-white py-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold">PDF GENERATOR</h1>
+                <nav>
+                    <ul class="flex space-x-4">
+                        <li><a href="/subscribe">S'abonner</a></li>
+                        <li><a href="/sign-in">Se connecter</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
         {% block body %}{% endblock %}
+
+        <footer class="bg-gray-800 text-white py-4 w-full absolute bottom-0">
+            <div class="container mx-auto text-center">
+                <p>&copy; 2024 PDF GENERATOR. Tous droits réservés.</p>
+            </div>
+        </footer>
     </body>
 </html>
