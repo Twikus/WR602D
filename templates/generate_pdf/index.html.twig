@@ -1,0 +1,15 @@
+{# templates/generate_pdf/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+{% block title %}Generate PDF{% endblock %}
+{% block body %}
+    <h1>Generate PDF</h1>
+    <form method="post" action="{{ path('generate_pdf') }}">
+        <label for="url">URL:</label>
+        <input type="text" id="url" name="url" required />
+        <button type="submit">Generate PDF</button>
+    </form>
+    {% if pdfName is defined %}
+        <a href="{{ pdfName }}" target="_blank">TÉLÉCHARGER</a>
+    {% endif %}
+{% endblock %}
