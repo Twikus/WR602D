@@ -10,4 +10,14 @@
 
 - ```docker compose up -d```
 
+## For start the project :
+
+- ```composer i```
+
+- ```npm run watch```
+
+- ```php bin/console d:m:m```
+
+- ```php bin/console d:f:l```
+
 Enjoy 🎉
