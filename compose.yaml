@@ -9,17 +9,27 @@ services:
         MYSQL_DATABASE: wr602d
     ports:
       - '3306:3306'
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - app_network
 
   app:
     container_name: app-webapp
-    image: 36dec4d66e35b3443398747bc864d66be2632b6601fb3aa2a28314d9360451e4  
+    image: 15a4f867cd4670448ee83df74c8c9e4d6091737dae28124b91add9bfd65b4ea2  
     ports:
       - '8080:80'
     volumes:
       - .:/var/www
+    networks:
+      - app_network
 ###< doctrine/doctrine-bundle ###
 
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+networks:
+  app_network:
+    external: true

@@ -20,6 +20,4 @@ WORKDIR /var/www
 
 RUN composer install
 
-ENTRYPOINT ["bash", "./docker/docker.sh"]
-
 EXPOSE 80
