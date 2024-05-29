@@ -77,6 +77,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->created_at = new \DateTimeImmutable();
         $this->updated_at = new \DateTimeImmutable();
 
+        $this->roles = ['ROLE_USER'];
+
         $this->pdfs = new ArrayCollection();
     }
 
