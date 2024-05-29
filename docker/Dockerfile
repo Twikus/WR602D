@@ -10,6 +10,8 @@ RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
 
 RUN apt update && apt install -yqq nodejs npm
 
+RUN docker-php-ext-install pdo_mysql
+
 COPY . /var/www/
 
 COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
