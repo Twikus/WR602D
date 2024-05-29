@@ -16,12 +16,18 @@
     <body>
         <header class="bg-red-600 text-white py-4">
             <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold">PDF GENERATOR</h1>
+                <h1 class="text-2xl font-bold"><a href="/">PDF GENERATOR</a></h1>
                 <nav>
+                    {% if app.user %}
+                    <ul class="flex space-x-4">
+                        <li><a href="/logout">Se déconnecter</a></li>
+                    </ul>
+                    {% else %}
                     <ul class="flex space-x-4">
                         <li><a href="/register">S'inscrire</a></li>
                         <li><a href="/login">Se connecter</a></li>
                     </ul>
+                    {% endif %}
                 </nav>
             </div>
         </header>
