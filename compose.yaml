@@ -23,6 +23,8 @@ services:
       - .:/var/www
     networks:
       - app_network
+    environment:
+      - DATABASE_URL=%env(resolve:DATABASE_URL)%
 ###< doctrine/doctrine-bundle ###
 
 volumes:
