@@ -17,10 +17,8 @@ class UserFixtures extends Fixture
             $user->setLastname('Doe');
             $user->setEmail('john.doe' . $i . '@example.com');
             $user->setPassword('password');
-            $user->setRole('ROLE_USER');
+            $user->setRoles(['ROLE_USER']);
             $user->setSubscriptionId($manager->getRepository(Subscription::class)->findOneBy(['title' => 'Free']));
-            $user->setCreatedAt(new \DateTimeImmutable());
-            $user->setUpdatedAt(new \DateTimeImmutable());
             $manager->persist($user);
         }
 
