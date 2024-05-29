@@ -18,22 +18,24 @@ class GeneratePdfController extends AbstractController
         $this->pdfService = $pdfService;
     }
 
-    #[Route('/generate-pdf', name: 'generate_pdf')]
+    #[Route('/url-to-pdf', name: 'url_to_pdf')]
     public function generatePdf(Request $request, PdfService $pdfService): Response
     {
-        // If the form was submitted
+        // Si le formulaire a été soumis
         if ($request->isMethod('POST')) {
-            // Get the URL from the form data
+            // Obtenez l'URL à partir des données du formulaire
             $url = $request->request->get('url');
 
-            // Generate the PDF and save it to a file
-            $pdfName = $pdfService->generatePdfFromUrl($url);
+            // Générez le PDF et enregistrez-le dans un fichier
+            $pdf = $pdfService->generatePdfFromUrl($url);
 
-            // Render the view with the path to the PDF
-            return $this->render('generate_pdf/index.html.twig', ['pdfName' => $pdfName]);
+            // ouvrir le pdf dans le navigateur
+            $pdfPath = $this->getParameter('kernel.project_dir') . '/public/' . $pdf->getTitle();
+            return $this->file($pdfPath);
         }
 
-        // If the form was not submitted, display the form
-        return $this->render('generate_pdf/index.html.twig');
+        // Si le formulaire n'a pas été soumis, affichez le formulaire
+        return $this->render('url_to_pdf/index.html.twig');
     }
+
 }

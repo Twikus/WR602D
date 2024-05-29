@@ -2,8 +2,9 @@
 
 namespace App\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use App\Service\PdfService;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -13,8 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 class RemovePdfsCommand extends Command
 {
-    public function __construct()
+
+    private $pdfService;
+
+    public function __construct(PdfService $pdfService)
     {
+        $this->pdfService = $pdfService;
+
         parent::__construct();
     }
 
@@ -27,11 +33,12 @@ class RemovePdfsCommand extends Command
     {
         $output->writeln('Removing PDF files...');
 
-        // remove all PDF files in /public
         $pdfDir = __DIR__ . '/../../public';
         $pdfFiles = glob($pdfDir . '/*.pdf');
         foreach ($pdfFiles as $pdfFile) {
-            unlink($pdfFile);
+            // get juste the file name
+            $pdfFile = basename($pdfFile);
+            $this->pdfService->removePdf($pdfFile);
         }
 
         $output->writeln('PDF files removed.');

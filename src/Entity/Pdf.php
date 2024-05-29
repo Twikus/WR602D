@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\PdfRepository;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PdfRepository;
 
 #[ORM\Entity(repositoryClass: PdfRepository::class)]
 class Pdf
@@ -16,12 +17,21 @@ class Pdf
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $is_deleted = false;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'pdfs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user = null;
+    private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->is_deleted = false;
+        $this->created_at = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -40,6 +50,18 @@ class Pdf
         return $this;
     }
 
+    public function getIsDeleted(): ?bool
+    {
+        return $this->is_deleted;
+    }
+
+    public function setIsDeleted(bool $is_deleted): static
+    {
+        $this->is_deleted = $is_deleted;
+
+        return $this;
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -52,12 +74,12 @@ class Pdf
         return $this;
     }
 
-    public function getUserId(): ?user
+    public function getUserId(): ?User
     {
         return $this->user;
     }
 
-    public function setUserId(?user $user): static
+    public function setUserId(?User $user): static
     {
         $this->user = $user;
 
