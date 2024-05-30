@@ -24,7 +24,7 @@ services:
     networks:
       - app_network
     environment:
-      - DATABASE_URL=%env(resolve:DATABASE_URL)%
+      - DATABASE_URL=mysql://root:password@database:3306/wr602d
 ###< doctrine/doctrine-bundle ###
 
 volumes:
