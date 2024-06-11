@@ -33,6 +33,21 @@ class Pdf
         $this->created_at = new \DateTimeImmutable();
     }
 
+    #[ORM\Column(type: 'blob')]
+    private $content;
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
