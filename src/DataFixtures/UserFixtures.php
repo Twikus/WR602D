@@ -21,8 +21,10 @@ class UserFixtures extends Fixture
     {
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
+            $subscription = $manager->getRepository(Subscription::class)->findOneBy(['title' => 'Free']);
             $user->setFirstname('John');
             $user->setLastname('Doe');
+            $user->setUserCredits($subscription->getPdfLimit());
             $user->setEmail('john.doe' . $i . '@example.com');
             $user->setPassword(
                 $this->userPasswordHasher->hashPassword(
@@ -31,7 +33,7 @@ class UserFixtures extends Fixture
                 )
             );
             $user->setRoles(['ROLE_USER']);
-            $user->setSubscriptionId($manager->getRepository(Subscription::class)->findOneBy(['title' => 'Free']));
+            $user->setSubscriptionId($subscription);
             $manager->persist($user);
         }
 

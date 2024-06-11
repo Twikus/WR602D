@@ -40,6 +40,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     private ?string $firstname = null;
 
+    // int
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank]
+    private ?int $user_credits = 0;
+
     #[ORM\Column(type: 'datetime_immutable')]
     #[Assert\NotBlank]
     private ?\DateTimeImmutable $created_at = null;
@@ -137,6 +142,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstname(string $firstname): static
     {
         $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getUserCredits(): ?int
+    {
+        return $this->user_credits;
+    }
+
+    public function setUserCredits(int $user_credits): self
+    {
+        $this->user_credits = $user_credits;
 
         return $this;
     }
@@ -251,6 +268,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(?Subscription $subscription): self
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

@@ -37,6 +37,8 @@ class RegistrationController extends AbstractController
             
             $user->setSubscriptionId($subscription);
 
+            $user->setUserCredits($subscription->getPdfLimit());
+
             $entityManager->persist($user);
             $entityManager->flush();
 

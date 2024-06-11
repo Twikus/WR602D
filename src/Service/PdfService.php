@@ -5,6 +5,7 @@ use App\Entity\Pdf;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class PdfService
 {
@@ -27,16 +28,9 @@ class PdfService
         // remove the file
         unlink(__DIR__ . '/../../public/' . $pdf->getTitle());
     }
-    
-    public function generatePdfFromUrl(string $url): Pdf
+
+    public function savePdf(Pdf $pdf): void
     {
-        $client = HttpClient::create();
-        $pdf = $client->request('GET', 'http://app-microservice:80/url-to-pdf?url=' . $url);
-
-        if ($pdf->getStatusCode() !== 200) {
-            throw new \Exception('The PDF could not be generated.');
-        }
-
         $user = $this->security->getUser();
 
         // Check if the user is logged in
@@ -47,12 +41,47 @@ class PdfService
         $pdfName = uniqid() . '.pdf';
         file_put_contents($pdfName, $pdf->getContent());
 
-        $pdf = new Pdf();
         $pdf->setTitle($pdfName);
         $pdf->setUserId($user);
 
         $this->entityManager->persist($pdf);
         $this->entityManager->flush();
+    }
+    
+    public function generatePdfFromUrl(string $url): Pdf
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'http://app-microservice:80/url-to-pdf?url=' . $url);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception('The PDF could not be generated.');
+        }
+
+        $pdf = new Pdf();
+        $pdf->setContent($response->getContent());
+        $this->savePdf($pdf);
+
+        return $pdf;
+    }
+
+    public function generatePdfFromHtml(UploadedFile $file): Pdf
+    {
+        $client = HttpClient::create();
+        $html = file_get_contents($file->getPathname());
+
+        $response = $client->request('POST', 'http://app-microservice:80/html-to-pdf', [
+            'body' => [
+                'html' => $html
+            ]
+        ]);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception('The PDF could not be generated.');
+        }
+
+        $pdf = new Pdf();
+        $pdf->setContent($response->getContent());
+        $this->savePdf($pdf);
 
         return $pdf;
     }

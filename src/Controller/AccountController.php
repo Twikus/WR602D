@@ -18,7 +18,9 @@ class AccountController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $doctrine->getManager()->flush();
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
             $this->addFlash('success', 'Vos informations ont été mises à jour.');
         }
 
