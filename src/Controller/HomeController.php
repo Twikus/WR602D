@@ -12,9 +12,7 @@ class HomeController extends AbstractController
     public function index(): Response
     {
         if ($this->getUser()) {
-            return $this->render('url_to_pdf/index.html.twig', [
-                'controller_name' => 'HomeController',
-            ]);
+            return $this->redirectToRoute('url_to_pdf');
         }
 
         return $this->render('home/index.html.twig', [
