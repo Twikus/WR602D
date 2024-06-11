@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Historique de générations{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Historique de générations</h1>
+        <div class="mt-8">
+            <div class="w-full lg:w-3/4 overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 mx-auto">
+                    <thead>
+                        <tr class="bg-gray-100 border-b">
+                            <th class="py-2 px-4 border-r">Titre</th>
+                            <th class="py-2 px-4">Date de création</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pdfHistory in pdf_histories %}
+                            <tr class="border-b">
+                                <td class="py-2 px-4 border-r">
+                                    {% if pdfHistory.getPdf().getTitle() == 'expired' %}
+                                        Expiré
+                                    {% else %}
+                                        <a href="{{ asset(pdfHistory.getPdf().getTitle()) }}" target="_blank" class="text-blue-600 hover:underline">
+                                            {{ pdfHistory.getPdf().getTitle() }}
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="py-2 px-4">{{ pdfHistory.getCreatedAt().format('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

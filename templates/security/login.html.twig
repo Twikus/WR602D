@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto py-8">
+        <h1 class="text-4xl font-bold text-center mb-8">Connexion</h1>
+
+        <form method="post" class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
+            {% if error %}
+                <div class="mb-4 text-red-600">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            {% if app.user %}
+                <div class="mb-4">
+                    Bienvenue {{ app.user.userIdentifier }} !
+                </div>
+            {% else %}
+                <div class="mb-4">
+                    <label for="inputEmail" class="block text-sm font-bold">Email</label>
+                    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="w-full border border-gray-300 p-2 rounded-lg" autocomplete="email" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="inputPassword" class="block text-sm font-bold">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="w-full border border-gray-300 p-2 rounded-lg" autocomplete="current-password" required>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="mb-4">
+                    <label class="block text-sm font-bold">
+                        <input type="checkbox" name="_remember_me"> Se souvenir de moi
+                    </label>
+                </div>
+
+                <button type="submit" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Se connecter</button>
+
+                <p class="mt-4 text-center">Vous n'avez pas de compte ? <a href="{{ path('app_register') }}" class="text-red-600 hover:underline">Inscrivez-vous</a></p>
+            {% endif %}
+        </form>
+    </div>
+{% endblock %}
