@@ -36,6 +36,9 @@ class Pdf
     #[ORM\Column(type: 'blob')]
     private $content;
 
+    #[ORM\OneToOne(mappedBy: 'pdf', cascade: ['persist', 'remove'])]
+    private ?PdfHistory $pdfHistory = null;
+
     public function getContent(): ?string
     {
         return $this->content;
@@ -97,6 +100,28 @@ class Pdf
     public function setUserId(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPdfHistory(): ?PdfHistory
+    {
+        return $this->pdfHistory;
+    }
+
+    public function setPdfHistory(?PdfHistory $pdfHistory): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($pdfHistory === null && $this->pdfHistory !== null) {
+            $this->pdfHistory->setPdf(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($pdfHistory !== null && $pdfHistory->getPdf() !== $this) {
+            $pdfHistory->setPdf($this);
+        }
+
+        $this->pdfHistory = $pdfHistory;
 
         return $this;
     }

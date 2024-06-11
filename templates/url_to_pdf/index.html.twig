@@ -43,7 +43,9 @@
                 </form>
             </div>
             <div class="mt-6 text-center">
-                <p>Crédits restants : <span class="font-bold">{{ app.user.userCredits }}</span></p>
+                {% if app.user.userCredits is defined %}
+                    <p>Crédits restants : <span class="font-bold">{{ app.user.userCredits }}</span></p>
+                {% endif %}
                 {% if error is defined %}
                     <p class="mt-4 text-red-600 font-bold">{{ error }}</p>
                 {% endif %}

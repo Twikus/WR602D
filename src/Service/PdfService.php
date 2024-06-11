@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use App\Entity\Pdf;
+use App\Entity\PdfHistory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpClient\HttpClient;
@@ -46,6 +47,8 @@ class PdfService
 
         $this->entityManager->persist($pdf);
         $this->entityManager->flush();
+
+        $this->logPdfCreation($pdf);
     }
     
     public function generatePdfFromUrl(string $url): Pdf
@@ -84,5 +87,15 @@ class PdfService
         $this->savePdf($pdf);
 
         return $pdf;
+    }
+
+    public function logPdfCreation(Pdf $pdf): void
+    {
+        $pdfHistory = new PdfHistory();
+        $pdfHistory->setPdf($pdf);
+        $pdfHistory->setUser($pdf->getUserId());
+
+        $this->entityManager->persist($pdfHistory);
+        $this->entityManager->flush();
     }
 }

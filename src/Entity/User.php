@@ -40,7 +40,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     private ?string $firstname = null;
 
-    // int
     #[ORM\Column(type: 'integer')]
     #[Assert\NotBlank]
     private ?int $user_credits = 0;
@@ -76,6 +75,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Pdf::class, mappedBy: 'user_id')]
     private Collection $pdfs;
 
+    /**
+     * @var Collection<int, PdfHistory>
+     */
+    #[ORM\OneToMany(targetEntity: PdfHistory::class, mappedBy: 'user')]
+    private Collection $pdfHistories;
+
     public function __construct()
     {
         $this->uuid = \Ramsey\Uuid\Uuid::uuid4()->toString();
@@ -85,6 +90,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles = ['ROLE_USER'];
 
         $this->pdfs = new ArrayCollection();
+        $this->pdfHistories = new ArrayCollection();
     }
 
     #[ORM\PreUpdate]
@@ -291,5 +297,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, PdfHistory>
+     */
+    public function getPdfHistories(): Collection
+    {
+        return $this->pdfHistories;
+    }
+
+    public function addPdfHistory(PdfHistory $pdfHistory): static
+    {
+        if (!$this->pdfHistories->contains($pdfHistory)) {
+            $this->pdfHistories->add($pdfHistory);
+            $pdfHistory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePdfHistory(PdfHistory $pdfHistory): static
+    {
+        if ($this->pdfHistories->removeElement($pdfHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($pdfHistory->getUser() === $this) {
+                $pdfHistory->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
