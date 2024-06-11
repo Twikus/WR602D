@@ -23,26 +23,34 @@ class GeneratePdfController extends AbstractController
     #[Route('/url-to-pdf', name: 'url_to_pdf')]
     public function generatePdf(Request $request, PdfService $pdfService, ManagerRegistry $doctrine): Response
     {   
-        // Si le formulaire a été soumis
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // If form was submitted
         if ($request->isMethod('POST')) {
-            // Obtenez l'URL à partir des données du formulaire
+            // Get the URL from the form data
             $url = $request->request->get('url');
 
-            $user = $this->getUser();
             $user_credits = $user->getUserCredits();
 
             if($user_credits < 1){
-                // renvoyer une erreur si l'utilisateur n'a pas de crédits
                 return $this->render('url_to_pdf/index.html.twig', [
                     'error' => 'Vous n\'avez plus assez de crédits pour générer un PDF, vous pouvez passer sur un abonnement supérieur pour obtenir plus de crédits.'
                 ]);
             }
 
-            //Générez le PDF et enregistrez-le dans un fichier
             $pdf = $pdfService->generatePdfFromUrl($url);
-            
-            // décrémenter le nombre de crédits de l'utilisateur
+        
+            // Decrement user credits
             $user->setUserCredits($user_credits - 1);
+
+            // Save the user
+            $em = $doctrine->getManager();
+            $em->persist($user);
+            $em->flush();
 
             $pdfPath = $this->getParameter('kernel.project_dir') . '/public/' . $pdf->getTitle();
             return $this->file($pdfPath);
