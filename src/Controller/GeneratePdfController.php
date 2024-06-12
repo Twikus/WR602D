@@ -4,20 +4,22 @@ namespace App\Controller;
 
 use App\Service\PdfService;
 
+use App\Service\WatermarkService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GeneratePdfController extends AbstractController
 {
     private $pdfService;
+    private $watermarkService;
 
-    public function __construct(PdfService $pdfService)
+    public function __construct(PdfService $pdfService, WatermarkService $watermarkService)
     {
         $this->pdfService = $pdfService;
+        $this->watermarkService = $watermarkService;
     }
 
     #[Route('/url-to-pdf', name: 'url_to_pdf')]
@@ -53,6 +55,12 @@ class GeneratePdfController extends AbstractController
             $em->flush();
 
             $pdfPath = $this->getParameter('kernel.project_dir') . '/public/' . $pdf->getTitle();
+            
+            // If the user's subscription is free, add a watermark
+            if ($user->getSubscription()->getTitle() === 'Free') {
+                $this->watermarkService->generateWatermark($pdfPath);
+            }
+
             return $this->file($pdfPath);
         }
 
