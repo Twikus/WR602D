@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Service\PdfService;
-
+use App\Service\EmailService;
 use App\Service\WatermarkService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,13 +13,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GeneratePdfController extends AbstractController
 {
-    private $pdfService;
-    private $watermarkService;
+    private PdfService $pdfService;
+    private WatermarkService $watermarkService;
+    private EmailService $emailService;
 
-    public function __construct(PdfService $pdfService, WatermarkService $watermarkService)
+
+    public function __construct(PdfService $pdfService, WatermarkService $watermarkService, EmailService $emailService)
     {
         $this->pdfService = $pdfService;
         $this->watermarkService = $watermarkService;
+        $this->emailService = $emailService;
     }
 
     #[Route('/url-to-pdf', name: 'url_to_pdf')]
@@ -60,6 +63,9 @@ class GeneratePdfController extends AbstractController
             if ($user->getSubscription()->getTitle() === 'Free') {
                 $this->watermarkService->generateWatermark($pdfPath);
             }
+
+            // Send an email to the user
+            $this->emailService->sendEmail($user->getEmail(), 'Votre PDF', 'Voici votre PDF', $pdfPath);
 
             return $this->file($pdfPath);
         }

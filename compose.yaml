@@ -25,6 +25,13 @@ services:
       - app_network
     environment:
       - DATABASE_URL=mysql://root:password@database:3306/wr602d
+
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - '1025:25'
+      - '1080:1080'
+
 ###< doctrine/doctrine-bundle ###
 
 volumes:
