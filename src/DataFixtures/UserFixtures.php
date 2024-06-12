@@ -32,11 +32,12 @@ class UserFixtures extends Fixture
                     'password'
                 )
             );
-            $user->setRoles(['ROLE_USER']);
-            $user->setSubscriptionId($subscription);
+            $user->setSubscription($subscription);
+            $user->setUserCredits($subscription->getPdfLimit());
+            // Persist the user object
             $manager->persist($user);
         }
-
+        // Flush all persisted objects
         $manager->flush();
     }
 }

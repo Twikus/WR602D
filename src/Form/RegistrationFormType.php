@@ -62,6 +62,15 @@ class RegistrationFormType extends AbstractType
                 'choice_label' => function (Subscription $subscription) {
                     return sprintf('%s (%d PDFs)', ucfirst($subscription->getTitle()), $subscription->getPdfLimit());
                 },
+                'choice_value' => function (?Subscription $subscription) {
+                    // Si $subscription est null, retournez une valeur par défaut
+                    if ($subscription === null) {
+                        return 'none';
+                    }
+
+                    // Sinon, utilisez le titre de l'abonnement en minuscules comme valeur
+                    return strtolower($subscription->getTitle());
+                },
                 'label' => 'Plan d\'abonnement',
                 'placeholder' => 'Choisissez un plan',
                 'constraints' => [

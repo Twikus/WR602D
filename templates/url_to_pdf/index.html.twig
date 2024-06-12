@@ -24,22 +24,28 @@
             <div id="urlTab" class="tab-content">
                 <h2 class="text-2xl font-bold mt-4 mb-4">Convertir URL en PDF</h2>
                 <form action="{{ path('url_to_pdf') }}" method="post">
-                    <input type="url" name="url" placeholder="Enter URL" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
-                    <button type="submit" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
+                    <input type="url" name="url" id="url_to_pdf" placeholder="Enter URL" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
+                    <button type="submit" id="generate_pdf" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
                 </form>
             </div>
-            <div id="htmlTab" class="tab-content hidden">
+             <div id="htmlTab" class="tab-content hidden">
+                <div class="bg-gray-200 p-4 rounded-lg">
+                    <p class="text-center text-gray-700">Feature en cours de développement</p>
+                </div>
                 <h2 class="text-2xl font-bold mt-4 mb-4">Convertir fichier HTML en PDF</h2>
                 <form action="{{ path('html_to_pdf') }}" method="post" enctype="multipart/form-data">
-                    <input type="file" name="html_file" accept=".html" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
-                    <button type="submit" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
+                    <input type="file" name="html_file" accept=".html" class="w-full border border-gray-300 p-2 rounded-lg mb-4" disabled>
+                    <button type="submit" class="w-full bg-grey-700 text-white p-2 rounded-lg" disabled>Convertir</button>
                 </form>
             </div>
             <div id="markdownTab" class="tab-content hidden">
+                <div class="bg-gray-200 p-4 rounded-lg">
+                    <p class="text-center text-gray-700">Feature en cours de développement</p>
+                </div>
                 <h2 class="text-2xl font-bold mt-4 mb-4">Convertir fichier Markdown en PDF</h2>
                 <form action="}" method="post" enctype="multipart/form-data">
-                    <input type="file" name="markdown_file" accept=".md" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
-                    <button type="submit" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
+                    <input type="file" name="markdown_file" accept=".md" class="w-full border border-gray-300 p-2 rounded-lg mb-4" disabled>
+                    <button type="submit" class="w-full bg-grey-700 text-white p-2 rounded-lg" disabled>Convertir</button>
                 </form>
             </div>
             <div class="mt-6 text-center">
