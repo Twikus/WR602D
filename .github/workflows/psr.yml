@@ -1,0 +1,27 @@
+name: PSR Standards
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  psr:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '7.4'
+        tools: composer, cs2pr
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+
+    - name: Check PSR standards
+      run: ./vendor/bin/phpcs --report=checkstyle | cs2pr
