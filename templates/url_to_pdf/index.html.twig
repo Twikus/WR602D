@@ -24,8 +24,8 @@
             <div id="urlTab" class="tab-content">
                 <h2 class="text-2xl font-bold mt-4 mb-4">Convertir URL en PDF</h2>
                 <form action="{{ path('url_to_pdf') }}" method="post">
-                    <input type="url" name="url" placeholder="Enter URL" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
-                    <button type="submit" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
+                    <input type="url" name="url" id="url_to_pdf" placeholder="Enter URL" class="w-full border border-gray-300 p-2 rounded-lg mb-4">
+                    <button type="submit" id="generate_pdf" class="w-full bg-red-600 text-white p-2 rounded-lg hover:bg-red-700">Convertir</button>
                 </form>
             </div>
              <div id="htmlTab" class="tab-content hidden">
