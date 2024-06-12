@@ -8,16 +8,37 @@ services:
         MYSQL_ROOT_PASSWORD: password
         MYSQL_DATABASE: wr602d
     ports:
-      # To allow the host machine to access the ports below, modify the lines below.
-      # For example, to allow the host to connect to port 3306 on the container, you would change
-      # "3306" to "3306:3306". Where the first port is exposed to the host and the second is the container port.
-      # See https://docs.docker.com/compose/compose-file/compose-file-v3/#ports for more information.
       - '3306:3306'
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+    volumes:
+      - database_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  app:
+    container_name: app-webapp
+    image: c7cefb6d6adc4351a61039bd8b12050d40b7fbfc65867c8c4098f863cb181439
+    ports:
+      - '8080:80'
+    volumes:
+      - .:/var/www
+    networks:
+      - app_network
+    environment:
+      - DATABASE_URL=mysql://root:password@database:3306/wr602d
+
+  mailer:
+    image: schickling/mailcatcher
+    ports:
+      - '1025:25'
+      - '1080:1080'
+
 ###< doctrine/doctrine-bundle ###
 
 volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+networks:
+  app_network:
+    external: true

@@ -17,9 +17,7 @@ class UserTest extends TestCase
         $lastname = 'Doe';
         $firstname = 'John';
         $password = 'password';
-        $role = 'ROLE_USER';
-        $createdAt = new \DateTimeImmutable();
-        $updatedAt = new \DateTimeImmutable();
+        $role = ['ROLE_USER'];
         $subscription = new Subscription();
 
         // Utilisation des setters
@@ -27,9 +25,7 @@ class UserTest extends TestCase
         $user->setLastname($lastname);
         $user->setFirstname($firstname);
         $user->setPassword($password);
-        $user->setRole($role);
-        $user->setCreatedAt($createdAt);
-        $user->setUpdatedAt($updatedAt);
+        $user->setRoles($role);
         $user->setSubscriptionId($subscription);
 
         // Vérification des getters
@@ -37,9 +33,7 @@ class UserTest extends TestCase
         $this->assertEquals($lastname, $user->getLastname());
         $this->assertEquals($firstname, $user->getFirstname());
         $this->assertEquals($password, $user->getPassword());
-        $this->assertEquals($role, $user->getRole());
-        $this->assertEquals($createdAt, $user->getCreatedAt());
-        $this->assertEquals($updatedAt, $user->getUpdatedAt());
+        $this->assertEquals($role, $user->getRoles());
         $this->assertEquals($subscription, $user->getSubscriptionId());
     }
 }
